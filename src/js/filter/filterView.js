@@ -1,26 +1,31 @@
-export function render(params){
 
-    console.log("render -> params", params);
 
-    let complexNames = '';
-    params.complexNames.forEach((name)=>{
-        complexNames += `<option value="${name}">ЖК ${name}</option>`;
-    });
+const elements = {
+	filterSelect: document.getElementsByClassName('filter__dropdown'),
+	filterRooms: document.getElementsByClassName('rooms__checkbox'),
+	filterFields: document.getElementsByClassName('range__input'),
+	filterSubmit: document.getElementsByClassName('filter__show'),
+};
 
-    let rooms = '';
-    params.roomValues.forEach((value)=>{
-        rooms += `<input
+export function render(params) {
+	let complexNames = '';
+	params.complexNames.forEach((name) => {
+		complexNames += `<option value="${name}">ЖК ${name}</option>`;
+	});
+
+	let rooms = '';
+	params.roomValues.forEach((value) => {
+		rooms += `<input
                     name="rooms"
                     type="checkbox"
                     id="rooms_${value}"
                     class="rooms__checkbox"
                     value="${value}"
                 /><label for="rooms_${value}" class="rooms__btn">${value}</label>`;
-    });
+	});
 
-
-    const markup = `
-            <form method="GET" class="container p-0">
+	const markup = `<!-- Filter -->
+            <form id="filter-form" method="GET" class="container p-0">
                 <div class="heading-1">Выбор квартир:</div>
                 <div class="filter">
                     <div class="filter__col">
@@ -96,11 +101,68 @@ export function render(params){
                     </div>
                 </div>
                 <div class="filter__buttons">
-                    <button class="filter__show">Показать 119 объектов</button>
-                    <button class="filter__reset">Сбросить фильтр</button>
+                    <button class="filter__show">Показать объекты</button>
+                    <button type="reset" class="filter__reset">Сбросить фильтр</button>
                 </div>
-            </form>`;
-            
-    
-    document.querySelector('#app').insertAdjacentHTML('afterbegin', markup);
+            </form>
+            <!-- // Filter -->`;
+
+	document.querySelector('#app').insertAdjacentHTML('afterbegin', markup);
+}
+
+export function changeButtonText(number) {
+
+    const btn = elements.filterSubmit[0];
+
+    let message;
+    if ( number > 0) {
+        message = `Показать ${number} объектов`;
+    } else {
+        message = 'Объекты не найдены. Измените условия поиска';
+    }
+    btn.innerText = message;
+
+    // Disable btn on empty result
+    btn.disabled = number === 0 ? true : false;
+
+}
+
+export function getInput() {
+	const searchParams = new URLSearchParams();
+
+	// 1. Значение с select
+	if (elements.filterSelect[0].value !== 'all') {
+		searchParams.append(
+			elements.filterSelect[0].name,
+			elements.filterSelect[0].value
+		);
+	}
+
+	// 2. Параметры комнат - чекбоксы
+	const roomsValues = [];
+	Array.from(elements.filterRooms).forEach((checkbox) => {
+		if (checkbox.value !== '' && checkbox.checked) {
+			roomsValues.push(checkbox.value);
+		}
+	});
+	const roomsValuesString = roomsValues.join(',');
+	if (roomsValuesString !== '') {
+		searchParams.append('rooms', roomsValuesString);
+	}
+
+    // 3. Значения площадь и цена - input
+    Array.from(elements.filterFields).forEach((input)=>{
+        if ( input.value !== '') {
+            searchParams.append(input.name, input.value)
+        }
+    });
+
+    const queryString = searchParams.toString();
+
+    if ( queryString ) {
+        return '?' + queryString;
+    } else {
+        return '';
+    }
+
 }
