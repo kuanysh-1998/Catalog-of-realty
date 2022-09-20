@@ -1,7 +1,6 @@
 {
   "name": "webpack",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "webpack --mode development",
@@ -22,5 +21,14 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuanysh-1998/Catalog-of-realty.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kuanysh-1998/Catalog-of-realty/issues"
+  },
+  "homepage": "https://github.com/kuanysh-1998/Catalog-of-realty#readme",
+  "description": ""
 }
