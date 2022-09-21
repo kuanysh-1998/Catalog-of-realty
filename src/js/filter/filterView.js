@@ -1,5 +1,3 @@
-
-
 const elements = {
 	filterSelect: document.getElementsByClassName('filter__dropdown'),
 	filterRooms: document.getElementsByClassName('rooms__checkbox'),
@@ -24,8 +22,7 @@ export function render(params) {
                 /><label for="rooms_${value}" class="rooms__btn">${value}</label>`;
 	});
 
-	const markup = `<!-- Filter -->
-            <form id="filter-form" method="GET" class="container p-0">
+	const markup = `<form id="filter-form" method="GET" class="container p-0">
                 <div class="heading-1">Выбор квартир:</div>
                 <div class="filter">
                     <div class="filter__col">
@@ -104,8 +101,7 @@ export function render(params) {
                     <button class="filter__show">Показать объекты</button>
                     <button type="reset" class="filter__reset">Сбросить фильтр</button>
                 </div>
-            </form>
-            <!-- // Filter -->`;
+            </form>`;
 
 	document.querySelector('#app').insertAdjacentHTML('afterbegin', markup);
 }
@@ -122,7 +118,7 @@ export function changeButtonText(number) {
     }
     btn.innerText = message;
 
-    // Disable btn on empty result
+   
     btn.disabled = number === 0 ? true : false;
 
 }
